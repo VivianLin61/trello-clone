@@ -1,24 +1,21 @@
-import { create } from '@/actions/create-board';
-import { Button } from '@/components/ui/button';
-import { db } from '@/lib/db';
-import { OrganizationSwitcher, auth } from '@clerk/nextjs';
-import React from 'react'
+import { db } from "@/lib/db";
 
-interface OrganizationIdPageProps {
+import { Board } from "./board";
+import { Form } from "./form";
 
-}
-
-export const OrganizationIdPage: React.FC<OrganizationIdPageProps> = async ({ }) => {
+const OrganizationIdPage = async () => {
     const boards = await db.board.findMany();
+
     return (
-        <div>
-            <form action={create}>
-                <input id="title" name="title" required type="text" placeholder="Enter your name" />
-                <Button type="submit">
-                    Submit
-                </Button>
-            </form>
+        <div className="flex flex-col space-y-4">
+            <Form />
+            <div className="space-y-2">
+                {boards.map((board) => (
+                    <Board key={board.id} title={board.title} id={board.id} />
+                ))}
+            </div>
         </div>
     );
-}
-export default OrganizationIdPage
+};
+
+export default OrganizationIdPage;
